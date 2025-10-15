@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Delivery Details | CandyWear</title>
+  <title>Checkout | CandyWear</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -12,80 +12,252 @@
       padding: 0;
     }
     .checkout-container {
-      max-width: 500px;
-      margin: 60px auto;
+      max-width: 800px;
+      margin: 40px auto;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      padding: 2rem;
+      padding: 1.5rem;
     }
     h2 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
+    .back-row {
+      display:flex;
+      gap: .5rem;
+      align-items:center;
+      margin-bottom: 1rem;
     }
+    .cart-list {
+      margin-bottom: 1.5rem;
+    }
+    .cart-item {
+      display:flex;
+      gap: 1rem;
+      padding: .8rem 0;
+      border-bottom: 1px solid #eee;
+      align-items:center;
+    }
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit:cover;
+      border-radius:4px;
+    }
+    .cart-item .meta {
+      flex:1;
+    }
+    .cart-item .meta h4 { margin:0 0 .2rem 0; }
+    .total-row {
+      text-align:right;
+      font-weight:700;
+      margin-bottom:1.2rem;
+    }
+    .delivery-form {
+      margin-bottom: 1rem;
+    }
+    label { display:block; margin-bottom:.4rem; font-weight:500;}
     input, textarea {
-      width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1.2rem;
-      border: 1px solid #eee;
-      border-radius: 4px;
-      background: #f8f8f8;
-      font-size: 1rem;
+      width:100%;
+      padding:.6rem;
+      margin-bottom:.8rem;
+      border:1px solid #eee;
+      border-radius:4px;
+      background:#f8f8f8;
     }
+    .actions-row { display:flex; gap:.6rem; margin-top:.6rem; }
     button {
-      width: 100%;
-      padding: 1rem;
-      background: #000;
-      color: #fff;
-      font-weight: 600;
+      padding: .8rem 1rem;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:600;
     }
-    button:hover {
-      background: #222;
+    .btn-back { background:#eee; color:#222; }
+    .btn-whatsapp { background:#25D366; color:#fff; flex:1; }
+    .btn-confirm { background:#000; color:#fff; flex:1; }
+    .empty-msg { text-align:center; color:#666; padding:1rem 0; }
+    @media (max-width:600px){
+      .checkout-container { margin:20px; padding:1rem; }
     }
   </style>
 </head>
 <body>
   <div class="checkout-container">
-    <h2>Delivery Details</h2>
-    <button id="back-btn" style="margin-bottom: 1rem;">&larr; Back to Cart</button>
-    <form id="delivery-form">
+    <div class="back-row">
+      <button id="back-btn" class="btn-back">&larr; Back to Shop</button>
+      <h2 style="flex:1; text-align:center; margin:0;">Delivery & Order Summary</h2>
+    </div>
+
+    <div id="cart-summary" class="cart-list">
+      <!-- Cart items will load here -->
+    </div>
+
+    <div id="cart-total" class="total-row">Total: R0.00</div>
+
+    <form id="delivery-form" class="delivery-form">
       <label for="name">Full Name</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="name" name="name" placeholder="Full name">
 
       <label for="address">Address</label>
-      <textarea id="address" name="address" rows="3" required></textarea>
+      <textarea id="address" name="address" rows="2" placeholder="Street address"></textarea>
 
       <label for="city">City</label>
-      <input type="text" id="city" name="city" required>
+      <input type="text" id="city" name="city" placeholder="City">
 
       <label for="postal">Postal Code</label>
-      <input type="text" id="postal" name="postal" required>
+      <input type="text" id="postal" name="postal" placeholder="Postal Code">
 
       <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" name="phone" required>
-
-      <button type="submit">Confirm Delivery</button>
+      <input type="tel" id="phone" name="phone" placeholder="WhatsApp phone number">
     </form>
-  </div>
-  <script>
-    document.getElementById('back-btn').onclick = function() {
-      window.location.href = "home.html#cart"; // Use a hash to indicate cart should open
-    };
 
-    document.getElementById('delivery-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Thank you! Your delivery details have been submitted.');
-      window.location.href = "home.html";
+    <div class="actions-row">
+      <button id="proceed-whatsapp" class="btn-whatsapp">Proceed with purchase (WhatsApp)</button>
+      <button id="confirm-delivery" class="btn-confirm">Confirm Delivery Details</button>
+    </div>
+
+    <p style="margin-top:1rem; font-size:.9rem; color:#666;">
+      When you click "Proceed with purchase", WhatsApp will open with a pre-filled message including your selected items and delivery details.
+    </p>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'candyCart';
+    const cartSummary = document.getElementById('cart-summary');
+    const cartTotalEl = document.getElementById('cart-total');
+    const backBtn = document.getElementById('back-btn');
+    const proceedBtn = document.getElementById('proceed-whatsapp');
+    const confirmDeliveryBtn = document.getElementById('confirm-delivery');
+
+    // WhatsApp number in international format without + or spaces. Replace with your number.
+    const WHATSAPP_NUMBER = '27834658524'; // <-- change this to your number
+
+    // Load cart
+    let cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+    function renderCart() {
+      cartSummary.innerHTML = '';
+      if (!cart || cart.length === 0) {
+        cartSummary.innerHTML = '<p class="empty-msg">Your cart is empty. Please add items in the shop.</p>';
+        cartTotalEl.textContent = 'Total: R0.00';
+        proceedBtn.disabled = true;
+        confirmDeliveryBtn.disabled = true;
+        return;
+      }
+
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('cart-item');
+        itemEl.innerHTML = `
+          <img src="${item.image || 'placeholder.jpg'}" alt="${item.name}">
+          <div class="meta">
+            <h4>${item.name}</h4>
+            <div>Price: R${item.price.toFixed(2)}</div>
+            <div>Quantity: ${item.quantity}</div>
+          </div>
+          <div style="font-weight:700;">R${itemTotal.toFixed(2)}</div>
+        `;
+        cartSummary.appendChild(itemEl);
+      });
+
+      cartTotalEl.textContent = `Total: R${total.toFixed(2)}`;
+      proceedBtn.disabled = false;
+      confirmDeliveryBtn.disabled = false;
+    }
+
+    // Build WhatsApp message and open
+    function openWhatsAppOrder() {
+      if (!cart || cart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+
+      const name = document.getElementById('name').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const postal = document.getElementById('postal').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      // Build order lines
+      let lines = [];
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        lines.push(`- ${item.name} x${item.quantity} — R${itemTotal.toFixed(2)}`);
+      });
+
+      const deliveryLines = [
+        name ? `Name: ${name}` : null,
+        address ? `Address: ${address}` : null,
+        city ? `City: ${city}` : null,
+        postal ? `Postal: ${postal}` : null,
+        phone ? `Phone: ${phone}` : null
+      ].filter(Boolean);
+
+      // Combine into message
+      let message = `Hello, I would like to place an order from CandyWear.%0A%0AOrder:%0A${lines.join('%0A')}`;
+      message += `%0A%0ATotal: R${total.toFixed(2)}`;
+      if (deliveryLines.length) {
+        message += `%0A%0ADelivery details:%0A${deliveryLines.join('%0A')}`;
+      }
+
+      // Compose WhatsApp URL
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+      // Open in new tab
+      window.open(url, '_blank');
+
+      
+    }
+
+    // Confirm delivery button: simple client-side check and feedback
+    confirmDeliveryBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const postal = document.getElementById('postal').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!name || !address || !city || !postal || !phone) {
+        alert('Please fill in all delivery fields before confirming.');
+        return;
+      }
+
+      // Validate phone number (South African format: starts with 0, 10 digits)
+      const phoneRegex = /^0\d{9}$/;
+      if (!phoneRegex.test(phone)) {
+        alert('Please enter a valid South African phone number (10 digits, starting with 0).');
+        return;
+      }
+
+      // Validate postal code (South African format: 4 digits)
+      const postalRegex = /^\d{4}$/;
+      if (!postalRegex.test(postal)) {
+        alert('Please enter a valid South African postal code (4 digits).');
+        return;
+      }
+
+      alert('Delivery details saved locally. Now click "Proceed with purchase (WhatsApp)" to complete the order.');
     });
+
+    proceedBtn.addEventListener('click', () => {
+      openWhatsAppOrder();
+    });
+
+    backBtn.addEventListener('click', () => {
+      // Go back to home/shop page
+      window.location.href = 'home.html';
+    });
+
+    // Initialize
+    renderCart();
   </script>
 </body>
 </html>

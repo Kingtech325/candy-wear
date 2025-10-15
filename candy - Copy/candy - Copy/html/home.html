@@ -656,7 +656,7 @@
           <div class="product-info">
             <h3 class="product-title">Center Flower + Back print </h3>
             <div class="product-price">R270</div>
-            <button class="add-to-cart" data-id="1" data-name="Classic Logo Tee" data-price="270">Add to Cart</button>
+            <button class="add-to-cart" data-id="1" data-name="Classic Logo Tee" data-price="270" data-image="center black.jfif">Add to Cart</button>
           </div>
         </div>
         
@@ -667,7 +667,7 @@
           <div class="product-info">
             <h3 class="product-title">Center Flower + White print</h3>
             <div class="product-price">R270</div>
-            <button class="add-to-cart" data-id="2" data-name="Striped Button-Up" data-price="270">Add to Cart</button>
+            <button class="add-to-cart" data-id="2" data-name="Striped Button-Up" data-price="270" data-image="centerwhite.jfif">Add to Cart</button>
           </div>
         </div>
         <div class="product-card">
@@ -677,7 +677,7 @@
           <div class="product-info">
             <h3 class="product-title">left Flower + White print</h3>
             <div class="product-price">R240</div>
-            <button class="add-to-cart" data-id="2" data-name="Striped Button-Up" data-price="240">Add to Cart</button>
+            <button class="add-to-cart" data-id="3" data-name="Left Flower + White print" data-price="240" data-image="candy1.jfif">Add to Cart</button>
           </div>
         </div>
         <div class="product-card">
@@ -792,187 +792,205 @@
     </div>
   </footer>
   
-  <script>
-    // Cart functionality
-    const cartBtn = document.getElementById('cart-btn');
-    const closeCart = document.getElementById('close-cart');
-    const cartModal = document.getElementById('cart-modal');
-    const overlay = document.getElementById('overlay');
-    const cartItems = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const addToCartBtns = document.querySelectorAll('.add-to-cart');
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    let cart = [];
-    
-    // Open cart
-    cartBtn.addEventListener('click', () => {
-      cartModal.classList.add('open');
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
-    
-    // Close cart
-    closeCart.addEventListener('click', closeCartModal);
-    overlay.addEventListener('click', closeCartModal);
-    
-    function closeCartModal() {
-      cartModal.classList.remove('open');
-      overlay.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-    
-    // Toggle mobile menu
-    mobileMenuBtn.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      overlay.classList.toggle('active');
-    });
-    
-    // Add to cart
-    addToCartBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        const name = btn.getAttribute('data-name');
-        const price = parseFloat(btn.getAttribute('data-price'));
-        
-        const existingItem = cart.find(item => item.id === id);
-        
-        if (existingItem) {
-          existingItem.quantity++;
-        } else {
-          cart.push({
-            id,
-            name,
-            price,
-            quantity: 1
-          });
-        }
-        
-        updateCart();
-        
-        // Show cart after adding item
-        cartModal.classList.add('open');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-    
-    // Update cart display
-    function updateCart() {
-      // Clear cart items
-      cartItems.innerHTML = '';
-      
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
-        cartTotal.textContent = 'Total: R0.00';
-        return;
-      }
-      
-      let total = 0;
-      
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-        cartItem.innerHTML = `
-          <div class="cart-item-image">
-            <img src="center black.jfif" alt="${item.name} product image">
-          </div>
-          <div class="cart-item-details">
-            <h4 class="cart-item-title">${item.name}</h4>
-            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-            <div class="cart-item-quantity">
-              <button class="quantity-btn decrease-btn" data-id="${item.id}">-</button>
-              <span>${item.quantity}</span>
-              <button class="quantity-btn increase-btn" data-id="${item.id}">+</button>
-            </div>
-            <button class="remove-item" data-id="${item.id}">Remove</button>
-          </div>
-        `;
-        
-        cartItems.appendChild(cartItem);
-      });
-      
-      cartTotal.textContent = `Total: R${total.toFixed(2)}`;
-      
-      // Add event listeners to quantity buttons
-      const decreaseBtns = document.querySelectorAll('.decrease-btn');
-      const increaseBtns = document.querySelectorAll('.increase-btn');
-      const removeBtns = document.querySelectorAll('.remove-item');
-      
-      decreaseBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
-          
-          if (item.quantity > 1) {
-            item.quantity--;
-          } else {
-            cart = cart.filter(item => item.id !== id);
-          }
-          
-          updateCart();
-        });
-      });
-      
-      increaseBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
-          item.quantity++;
-          updateCart();
-        });
-      });
-      
-      removeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          cart = cart.filter(item => item.id !== id);
-          updateCart();
-        });
+<script>
+// Cart functionality with persistence via localStorage
+const STORAGE_KEY = 'candyCart';
+const cartBtn = document.getElementById('cart-btn');
+const closeCart = document.getElementById('close-cart');
+const cartModal = document.getElementById('cart-modal');
+const overlay = document.getElementById('overlay');
+const cartItems = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('checkout-btn');
+const addToCartBtns = document.querySelectorAll('.add-to-cart');
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+
+// Load cart from localStorage or start empty
+let cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+// Utility: save cart
+function saveCart() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+}
+
+// Open cart
+cartBtn.addEventListener('click', () => {
+  cartModal.classList.add('open');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateCart(); // ensure latest shown
+});
+
+// Close cart
+closeCart.addEventListener('click', closeCartModal);
+overlay.addEventListener('click', closeCartModal);
+
+function closeCartModal() {
+  cartModal.classList.remove('open');
+  overlay.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Toggle mobile menu
+mobileMenuBtn.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+
+// Add to cart
+addToCartBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const id = btn.getAttribute('data-id');
+    const name = btn.getAttribute('data-name');
+    const price = parseFloat(btn.getAttribute('data-price')) || 0;
+    const image = btn.getAttribute('data-image') || 'placeholder.png';
+
+    const existingItem = cart.find(item => item.id === id);
+
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({
+        id,
+        name,
+        price,
+        image,
+        quantity: 1
       });
     }
-    
-    // Checkout
-    checkoutBtn.addEventListener('click', () => {
-      if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
+
+    saveCart();
+    updateCart();
+
+    // Show cart after adding
+    cartModal.classList.add('open');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+// Update cart display
+function updateCart() {
+  // Clear cart items
+  cartItems.innerHTML = '';
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
+    cartTotal.textContent = 'Total: R0.00';
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach(item => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+
+    const cartItem = document.createElement('div');
+    cartItem.classList.add('cart-item');
+
+    cartItem.innerHTML = `
+      <div class="cart-item-image">
+        <img src="${item.image || 'placeholder.png'}" alt="${item.name} product image">
+      </div>
+      <div class="cart-item-details">
+        <h4 class="cart-item-title">${item.name}</h4>
+          <button class="quantity-btn decrease-btn" data-id="${item.id}" aria-label="Decrease quantity">-</button>
+          <span class="item-quantity">${item.quantity}</span>
+          <button class="quantity-btn increase-btn" data-id="${item.id}" aria-label="Increase quantity">+</button>
+          <span class="item-quantity">${item.quantity}</span>
+          <button class="quantity-btn increase-btn" data-id="${item.id}">+</button>
+        </div>
+        <button class="remove-item" data-id="${item.id}">Remove</button>
+      </div>
+    `;
+
+    cartItems.appendChild(cartItem);
+  });
+
+  cartTotal.textContent = `Total: R${total.toFixed(2)}`;
+
+  // Add event listeners after rendering
+  const decreaseBtns = cartItems.querySelectorAll('.decrease-btn');
+  const increaseBtns = cartItems.querySelectorAll('.increase-btn');
+  const removeBtns = cartItems.querySelectorAll('.remove-item');
+
+  decreaseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const item = cart.find(i => i.id === id);
+
+      if (!item) return;
+
+      if (item.quantity > 1) {
+        item.quantity--;
+      } else {
+        cart = cart.filter(i => i.id !== id);
       }
-      
-      alert('Thank you for your purchase! This is a demo store, so no real transaction occurred.');
-      cart = [];
+
+      saveCart();
       updateCart();
-      closeCartModal();
     });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-          });
-          
-          // Close mobile menu if open
-          if (navMenu.classList.contains('active')) {
-            navMenu.classList.remove('active');
-            overlay.classList.remove('active');
-          }
-        }
+  });
+
+  increaseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.quantity++;
+      saveCart();
+      updateCart();
+    });
+  });
+
+  removeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCart();
+    });
+  });
+}
+
+// Proceed to checkout: go to checkout page (which will read cart from localStorage)
+checkoutBtn.addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Add items to your cart before checking out.');
+    return;
+  }
+  // navigate to checkout-details.html in same folder
+  window.location.href = 'checkout-details.html';
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 100,
+        behavior: 'smooth'
       });
-    });
-  </script>
+
+      // Close mobile menu if open
+      if (navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+      }
+    }
+  });
+});
+
+// Initialize cart UI from localStorage on page load
+updateCart();
+</script>
 </body>
 </html>
