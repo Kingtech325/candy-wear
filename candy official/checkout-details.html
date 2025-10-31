@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delivery Details | CandyWear</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    .checkout-container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      background: #f8f8f8;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 1rem;
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="checkout-container">
+    <h2>Delivery Details</h2>
+    <button id="back-btn" style="margin-bottom: 1rem;">&larr; Back to Cart</button>
+    <form id="delivery-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="address">Address</label>
+      <textarea id="address" name="address" rows="3" required></textarea>
+
+      <label for="city">City</label>
+      <input type="text" id="city" name="city" required>
+
+      <label for="postal">Postal Code</label>
+      <input type="text" id="postal" name="postal" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <button type="submit">Confirm Delivery</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('back-btn').onclick = function() {
+      window.location.href = "home.html#cart"; // Use a hash to indicate cart should open
+    };
+
+    document.getElementById('delivery-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you! Your delivery details have been submitted.');
+      window.location.href = "home.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | CandyWear</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .account-container {
+      max-width: 400px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem;
+    }
+    .account-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .account-logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    .account-title {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .account-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .account-form input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      background: #f8f8f8;
+      font-size: 1rem;
+    }
+    .account-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .account-btn:hover {
+      background: #222;
+    }
+    .account-links {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .account-links a {
+      color: #222;
+      text-decoration: underline;
+      margin: 0 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="account-container">
+    <div class="account-logo">
+      <img src="logo2.jpeg" alt="CandyWear Logo">
+      <span style="font-weight:800; font-size:1.2rem;">CandyWear</span>
+    </div>
+    <div class="account-title">Create Your Account</div>
+    <form class="account-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required placeholder="Enter your name">
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Create a password">
+
+      <button type="submit" class="account-btn">Create Account</button>
+    </form>
+    <div class="account-links">
+      <a href="login.html">Already have an account? Login</a> |
+      <a href="home.html">Back to Home</a>
+    </div>
+  </div>
+</body>
+</html>
