@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CandyWear | Modern Black & White Fashion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset & Base Styles */
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-100: #f8f8f8;
+      --gray-200: #eeeeee;
+      --gray-500: #888888;
+      --gray-800: #222222;
+      --transition: all 0.3s ease;
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--black);
+      background-color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    ul {
+      list-style: none;
+    }
+    
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+    }
+    
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--white);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 0.8rem 0;
+    }
+    
+    .header-content {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    
+    .logo {
+      position: absolute;
+      left: 20px;
+      top: 15px;
+      z-index: 101;
+      background-color: var(--white);
+      padding: 10px;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo img {
+      height: 60px;
+      border-radius: 50%;
+    }
+    .text-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      padding: 0 2rem;
+    }
+    @media (min-width: 768px) {
+      .logo {
+        left: 30px;
+        top: 20px;
+      }
+      .logo img {
+        height: 80px;
+      }
+    }
+
+
+    
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      grid-column: 2;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--black);
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .nav-icons {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 1.2rem;
+      grid-column: 3;
+      justify-self: end;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+    }
+    
+    /* Hero Section */
+    .hero {
+      padding: 5rem 0 3rem;
+      background-color: var(--gray-100);
+    }
+    
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .hero-text h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-text p {
+      font-size: 1.1rem;
+      color: var(--gray-800);
+      margin-bottom: 2rem;
+    }
+    
+    .hero-btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: var(--black);
+      color: var(--white);
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .hero-btn:hover {
+      background-color: var(--gray-800);
+      transform: translateY(-2px);
+    }
+    
+    .hero-image {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+    }
+    
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Featured Categories */
+    .categories {
+      padding: 4rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+    }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    
+    .category-card {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+    
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    
+    .category-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .category-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: var(--white);
+      font-weight: 600;
+    }
+    
+    /* Products Section */
+    .products {
+      padding: 4rem 0;
+      background-color: var(--gray-100);
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .product-card {
+      background-color: var(--white);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .product-image {
+      height: 300px;
+      overflow: hidden;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .product-info {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      flex-grow: 1;
+    }
+    
+    .product-price {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .add-to-cart {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--black);
+      color: var(--white);
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: auto;
+    }
+    
+    .add-to-cart:hover {
+      background-color: var(--gray-800);
+    }
+    
+    /* About Section */
+    .about {
+      padding: 4rem 0;
+    }
+    
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .about-image {
+      height: 500px;
+    }
+    
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .about-text h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-text p {
+      margin-bottom: 1.5rem;
+      color: var(--gray-800);
+    }
+    
+    /* Cart Modal */
+    .cart-modal {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background-color: var(--white);
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      transition: var(--transition);
+      z-index: 1000;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    
+    .cart-modal.open {
+      right: 0;
+    }
+    
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .close-cart {
+      background: none;
+      font-size: 1.5rem;
+    }
+    
+    .cart-items {
+      margin-bottom: 2rem;
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .cart-item-details {
+      flex: 1;
+    }
+    
+    .cart-item-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .cart-item-price {
+      color: var(--gray-800);
+      margin-bottom: 0.5rem;
+    }
+    
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .quantity-btn {
+      width: 25px;
+      height: 25px;
+      background-color: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .remove-item {
+      color: var(--gray-500);
+      background: none;
+      font-size: 0.9rem;
+    }
+    
+    .cart-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: right;
+    }
+    
+    .checkout-btn {
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--black);
+      color: var(--white);
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .checkout-btn:hover {
+      background-color: var(--gray-800);
+    }
+    
+    /* Footer */
+    footer {
+      background-color: var(--black);
+      color: var(--white);
+      padding: 2rem 0;
+    }
+    
+    .footer-content {
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+    
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 999;
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .hero-content,
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        position: static;
+        order: 2;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+      }
+      .logo img {
+        height: 50px;
+      }
+      .text-logo {
+        display: none;
+      }
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        height: 100vh;
+        background-color: var(--white);
+        flex-direction: column;
+        padding: 2rem;
+        transition: var(--transition);
+        z-index: 1000;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+      }
+      
+      .nav-menu.active {
+        left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+        order: 1;
+      }
+      .nav-icons {
+        order: 3;
+      }
+      
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .category-grid,
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        
+        <a href="#" class="logo">
+          <img src="assets/images/logo2.jpeg" alt="CandyWear Logo">
+        </a>
+
+        
+        <nav class="nav-menu">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#shop" class="nav-link">Shop</a>
+          <a href="#" class="text-logo">CandyWear</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        
+        <div class="nav-icons">
+          <a href="#" id="cart-btn"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+        
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Elevate Your Style with Monochrome Elegance</h1>
+          <p>Discover our exclusive black and white collection that combines comfort, quality, and contemporary design for the modern fashion enthusiast.</p>
+          <a href="#shop" class="hero-btn">Shop Collection</a>
+        </div>
+        
+        <div class="hero-image">
+          <img src="assets/images/head.jpeg" alt="Stylish model wearing CandyWear black and white outfit with modern urban backdrop">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  <!-- Products Section -->
+  <section class="products" id="shop">
+    <div class="container">
+      <h2 class="section-title">Featured Products</h2>
+      
+      <div class="product-grid">
+        
+        
+      </div>
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-image">
+          <img src="assets/images/spul.jfif" alt="CandyWear design studio with designers working on new black and white collections">
+        </div>
+        
+        <div class="about-text">
+          <h2>About CandyWear</h2>
+          <h3>Welcome to Candy Wear</h3>
+
+          <p>At Candy Wear, we're passionate about creating clothing that makes you feel confident, stylish, and true to yourself. Founded by Pule Matshi, our brand is built on a love for fashion and a commitment to quality.</p>
+          <h3>Our Story</h3>
+          <p>As a clothing brand, Candy Wear was born out of a desire to bring unique, trendy, and comfortable clothing to our customers. With a keen eye for detail and a passion for innovation, our founder, Pule Matshi, has crafted a brand that reflects his vision of style and self-expression.</p>
+          <h3>Our Mission</h3>
+          <p>At Candy Wear, our mission is to provide high-quality, fashion-forward clothing that empowers our customers to express themselves. We strive to deliver exceptional customer service, build strong relationships with our community, and stay at the forefront of fashion trends.</p>
+        
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cart-modal">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="close-cart" id="close-cart">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="cart-items" id="cart-items">
+      <!-- Cart items will be added here dynamically -->
+      <p class="empty-cart-message">Your cart is empty</p>
+    </div>
+    
+    <div class="cart-total" id="cart-total">
+      Total: R0.00
+    </div>
+    
+    <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+  </div>
+  
+  <div class="overlay" id="overlay"></div>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <a href="#" class="footer-logo">CANDYWEAR</a>
+      </div>
+    </div>
+  </footer>
+  
+<script>
+// Product data
+const products = [
+  {
+    id: 1,
+    name: 'Center Flower + Back print',
+    price: 270,
+    image: 'assets/images/center black.jfif',
+    alt: 'Classic black t-shirt with minimalist CandyWear logo'
+  },
+  {
+    id: 2,
+    name: 'Center Flower + White print',
+    price: 270,
+    image: 'assets/images/centerwhite.jfif',
+    alt: 'Black and white striped long sleeve shirt with button front'
+  },
+  {
+    id: 3,
+    name: 'left Flower + White print',
+    price: 240,
+    image: 'assets/images/candy1.jfif',
+    alt: 'Black and white striped long sleeve shirt with button front'
+  },
+  {
+    id: 4,
+    name: 'Left Flower + Back print',
+    price: 240,
+    image: 'assets/images/candy2.jfif',
+    alt: 'Black and white striped long sleeve shirt with button front'
+  },
+  {
+    id: 5,
+    name: 'Left Flower + Back print',
+    price: 250,
+    image: 'assets/images/candy2.jfif',
+    alt: 'Black and white striped long sleeve shirt with button front'
+  }
+];
+
+// Function to render products
+function renderProducts() {
+  const productGrid = document.querySelector('.product-grid');
+  productGrid.innerHTML = '';
+  products.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.classList.add('product-card');
+    productCard.innerHTML = `
+      <div class="product-image">
+        <img src="${product.image}" alt="${product.alt}">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${product.name}</h3>
+        <div class="product-price">R${product.price}</div>
+        <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}">Add to Cart</button>
+      </div>
+    `;
+    productGrid.appendChild(productCard);
+  });
+}
+
+// Cart functionality with persistence via localStorage
+const STORAGE_KEY = 'candyCart';
+const cartBtn = document.getElementById('cart-btn');
+const closeCart = document.getElementById('close-cart');
+const cartModal = document.getElementById('cart-modal');
+const overlay = document.getElementById('overlay');
+const cartItems = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('checkout-btn');
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+
+// Load cart from localStorage or start empty
+let cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+// Utility: save cart
+function saveCart() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+}
+
+// Open cart
+cartBtn.addEventListener('click', () => {
+  cartModal.classList.add('open');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateCart(); // ensure latest shown
+});
+
+// Close cart
+closeCart.addEventListener('click', closeCartModal);
+overlay.addEventListener('click', closeCartModal);
+
+function closeCartModal() {
+  cartModal.classList.remove('open');
+  overlay.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Toggle mobile menu
+mobileMenuBtn.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+
+// Add to cart
+function initializeAddToCartButtons() {
+  const addToCartBtns = document.querySelectorAll('.add-to-cart');
+  addToCartBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+      const price = parseFloat(btn.getAttribute('data-price')) || 0;
+      const image = btn.getAttribute('data-image') || 'placeholder.png';
+
+      const existingItem = cart.find(item => item.id === id);
+
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({
+          id,
+          name,
+          price,
+          image,
+          quantity: 1
+        });
+      }
+
+      saveCart();
+      updateCart();
+
+      // Show cart after adding
+      cartModal.classList.add('open');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+}
+
+// Update cart display
+function updateCart() {
+  // Clear cart items
+  cartItems.innerHTML = '';
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
+    cartTotal.textContent = 'Total: R0.00';
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach(item => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+
+    const cartItem = document.createElement('div');
+    cartItem.classList.add('cart-item');
+
+    cartItem.innerHTML = `
+      <div class="cart-item-image">
+        <img src="${item.image || 'placeholder.png'}" alt="${item.name} product image">
+      </div>
+      <div class="cart-item-details">
+        <h4 class="cart-item-title">${item.name}</h4>
+        <p class="cart-item-price">R${item.price.toFixed(2)}</p>
+        <div class="cart-item-quantity">
+          <button class="quantity-btn decrease-btn" data-id="${item.id}">-</button>
+          <span class="item-quantity">${item.quantity}</span>
+          <button class="quantity-btn increase-btn" data-id="${item.id}">+</button>
+        </div>
+      </div>
+      <button class="remove-item" data-id="${item.id}">Remove</button>
+    `;
+
+    cartItems.appendChild(cartItem);
+  });
+
+  cartTotal.textContent = `Total: R${total.toFixed(2)}`;
+
+  // Add event listeners after rendering
+  const decreaseBtns = cartItems.querySelectorAll('.decrease-btn');
+  const increaseBtns = cartItems.querySelectorAll('.increase-btn');
+  const removeBtns = cartItems.querySelectorAll('.remove-item');
+
+  decreaseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const item = cart.find(i => i.id === id);
+
+      if (!item) return;
+
+      if (item.quantity > 1) {
+        item.quantity--;
+      } else {
+        cart = cart.filter(i => i.id !== id);
+      }
+
+      saveCart();
+      updateCart();
+    });
+  });
+
+  increaseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.quantity++;
+      saveCart();
+      updateCart();
+    });
+  });
+
+  removeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCart();
+    });
+  });
+}
+
+// Proceed to checkout: go to checkout page (which will read cart from localStorage)
+checkoutBtn.addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Add items to your cart before checking out.');
+    return;
+  }
+  // navigate to checkout-details.html in same folder
+  window.location.href = 'checkout-details.html';
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 100,
+        behavior: 'smooth'
+      });
+
+      // Close mobile menu if open
+      if (navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+      }
+    }
+  });
+});
+
+// Initialize products and cart UI on page load
+renderProducts();
+initializeAddToCartButtons();
+updateCart();
+</script>
+</body>
+</html>
